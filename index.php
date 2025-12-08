@@ -1,25 +1,20 @@
 <?php
-// 1. BẬT BÁO LỖI (Để không bị màn hình trắng)
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-// 2. Khởi tạo Session
+// 1. Khởi tạo Session
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// 3. Kết nối Database
+// 2. Kết nối Database
 require_once './config/Database.php';
 
-// 4. Lấy tham số từ URL
+// 3. Lấy tham số từ URL
 $controller = isset($_GET['controller']) ? $_GET['controller'] : 'home';
 $action     = isset($_GET['action']) ? $_GET['action'] : 'index';
 
-// 5. Chuẩn hóa tên Class 
+// 4. Chuẩn hóa tên Class 
 $controllerName = ucfirst(strtolower($controller)) . 'Controller';
 
-// 6. ĐƯỜNG DẪN FILE 
+// 5. ĐƯỜNG DẪN FILE 
 $controllerPath = "./controller/" . $controllerName . ".php";
 
 if (file_exists($controllerPath)) {
