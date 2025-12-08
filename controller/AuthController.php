@@ -1,5 +1,4 @@
 <?php
-// Sửa đường dẫn tương đối (tính từ file index.php ở root)
 require_once "./models/User.php";
 
 class AuthController {
@@ -16,7 +15,6 @@ class AuthController {
 
     // --- ĐĂNG NHẬP ---
     public function login(){
-        // Sửa đường dẫn view
         require "./views/auth/login.php";
     }
 
@@ -27,7 +25,7 @@ class AuthController {
 
             $errors = [];
 
-            // 1. Validate dữ liệu
+            //validate
             if(empty($email)){
                 $errors[] = "Vui lòng nhập email!";
             } else if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
@@ -38,13 +36,11 @@ class AuthController {
                 $errors[] = "Vui lòng nhập mật khẩu!";
             }
             
-            // Nếu có lỗi validate -> Trả về View ngay
             if(!empty($errors)){
                 require "./views/auth/login.php";
                 return;
             }
 
-            // 2. Kiểm tra thông tin trong DB
             $user = $this->userModel->getUserByEmail($email);
 
             if($user && password_verify($password, $user['password'])){
@@ -53,23 +49,21 @@ class AuthController {
                 $_SESSION['user_name'] = $user['fullname'];
                 $_SESSION['role'] = $user['role'];
                 
-                // Điều hướng theo Role
                 switch ($user['role']) {
-                    case 0: // Student
+                    case 0:
                         header('Location: index.php?controller=student&action=dashboard');
                         break;
-                    case 1: // Instructor (Ví dụ)
+                    case 1: 
                         header('Location: index.php?controller=instructor&action=dashboard');
                         break;
-                    case 2: // Admin (Ví dụ)
+                    case 2:
                         header('Location: index.php?controller=admin&action=dashboard');
                         break;
                     default:
                         header('Location: index.php');
                 }
-                exit; // Quan trọng: Dừng luồng sau khi redirect
+                exit; 
             } else {
-                // Sai tài khoản hoặc mật khẩu
                 $errors[] = "Email hoặc mật khẩu không chính xác!";
                 require "./views/auth/login.php";
             }
@@ -85,15 +79,12 @@ class AuthController {
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
             $userName = trim($_POST['username'] ?? '');
             $email    = trim($_POST['email'] ?? '');
-            $password = $_POST['password'] ?? ''; // Mật khẩu không nên trim vì khoảng trắng cũng là ký tự
+            $password = $_POST['password'] ?? ''; 
             $fullname = trim($_POST['fullname'] ?? '');
 
-            // Mặc định role = 0 (Student)
-            // Bạn không cần biến $role ở đây nếu hàm studentRegister đã mặc định insert role 0
+            $role = 0;
 
             $errors = [];
-
-            // --- VALIDATE DỮ LIỆU ---
 
             // Username
             if (empty($userName)) {
@@ -134,20 +125,14 @@ class AuthController {
                 $errors[] = "Vui lòng nhập họ tên!";
             }
 
-            // --- QUAN TRỌNG: KIỂM TRA LỖI TRƯỚC KHI TẠO ---
             if (!empty($errors)) {
-                // Nếu có bất kỳ lỗi nào, require lại view để hiện lỗi và DỪNG hàm lại
                 require './views/auth/register.php';
                 return; 
             }
 
-            // Nếu không có lỗi -> Gọi Model để tạo User
-            // Lưu ý: Password nên được hash trong Model hoặc hash tại đây trước khi truyền đi
-            // Giả sử hàm studentRegister của bạn tự hash password nhé.
             $isCreated = $this->userModel->studentRegister($userName, $email, $password, $fullname);
 
             if($isCreated){
-                // Đăng ký thành công -> Chuyển về trang đăng nhập
                 header('Location: index.php?controller=auth&action=login');
                 exit;
             } else {

@@ -16,14 +16,12 @@ require_once './config/Database.php';
 $controller = isset($_GET['controller']) ? $_GET['controller'] : 'home';
 $action     = isset($_GET['action']) ? $_GET['action'] : 'index';
 
-// 5. Chuẩn hóa tên Class (vd: auth -> AuthController)
+// 5. Chuẩn hóa tên Class 
 $controllerName = ucfirst(strtolower($controller)) . 'Controller';
 
-// 6. ĐƯỜNG DẪN FILE (Sửa chỗ này: bỏ chữ 's' đi)
-// Đường dẫn sẽ là: ./controller/AuthController.php
+// 6. ĐƯỜNG DẪN FILE 
 $controllerPath = "./controller/" . $controllerName . ".php";
 
-// 7. Kiểm tra và chạy Controller
 if (file_exists($controllerPath)) {
     require_once $controllerPath;
 
