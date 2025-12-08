@@ -48,6 +48,33 @@ class AuthController{
             }
         }
     }
+
+    //Đăng Ký
+    public function register(){
+        require '/views/auth/register.php'
+    }
+
+    public function handleRegister(){
+        if($_SERVER['REQUEST_METHOD'] = 'POST'){
+            $userName = $_POST['username'];
+            $email = $_POST['email'];
+            $password = $_POST['password'];
+            $fullname = $_POST['fullname'];
+
+            $role = 0;
+
+            $isCreated = $this->userModel->studentRegister($userName, $email, $password, $fullname);
+
+            if($isCreated){
+                header('Location: ....');
+            }
+            else{
+                $error = 'Lỗi đăng ký!';
+            }
+        }
+    }
+
+
 }
 
 
