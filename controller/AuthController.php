@@ -33,7 +33,7 @@ class AuthController{
                 exit;
             }
             else if($user['role'] == 1){
-                header('LocatioN: ...');
+                header('Location: ...');
                 exit;
             }
             else if($user['role'] == 2){
