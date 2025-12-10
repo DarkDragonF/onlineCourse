@@ -1,6 +1,6 @@
 <?php
-// Nạp Model Course để sử dụng
-require_once './Models/Course.php';
+// SỬA: Đổi './Models/' thành './models/' (chữ m thường) để khớp với thư mục
+require_once './models/Course.php';
 
 class CourseController {
     
@@ -10,17 +10,19 @@ class CourseController {
         $courseModel = new Course();
         
         // Lấy dữ liệu từ Model
-        // Lấy 3 khóa nổi bật cho Slider
         $featuredCourses = $courseModel->getFeaturedCourses(3); 
-        // Lấy 6 khóa mới nhất cho danh sách
         $newCourses = $courseModel->getNewCourses(6);       
         
-        // Gọi View và truyền dữ liệu sang
-        // (Biến $featuredCourses và $newCourses sẽ dùng được bên trong file view này)
-        require_once './views/viewcourse.php';
+        // Gọi View
+        // Lưu ý: Đảm bảo file viewcourse.php nằm đúng trong thư mục views
+        if (file_exists('./views/viewcourse.php')) {
+            require_once './views/viewcourse.php';
+        } else {
+            echo "Lỗi: Không tìm thấy file view tại './views/viewcourse.php'";
+        }
     }
 
-    // 2. Hàm hiển thị Chi tiết khóa học (Dùng cho trang Detail sau này)
+    // 2. Hàm hiển thị Chi tiết khóa học
     public function show() {
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
@@ -28,16 +30,18 @@ class CourseController {
             $courseModel = new Course();
             $course = $courseModel->getCourseById($id);
 
-            // Nếu không tìm thấy khóa học thì báo lỗi hoặc về trang chủ
             if (!$course) {
                 echo "Khóa học không tồn tại!";
                 return;
             }
 
-            // Gọi View chi tiết (Chúng ta sẽ tạo file này ở bước sau)
-            require_once './views/course/detail.php';
+            // Gọi View chi tiết
+            if (file_exists('./views/course/detail.php')) {
+                require_once './views/course/detail.php';
+            } else {
+                echo "Chức năng xem chi tiết đang hoàn thiện (Chưa có file view)";
+            }
         } else {
-            // Nếu không có ID thì quay về trang chủ
             header("Location: index.php");
         }
     }
