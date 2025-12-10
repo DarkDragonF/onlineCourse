@@ -1,4 +1,5 @@
 <?php
+//comment cho có =))
 // 1. Khởi tạo Session
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
