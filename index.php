@@ -1,36 +1,37 @@
 <?php
-// index.php - File chạy chính (Router)
-
-// 1. Gọi file Controller
-// Lưu ý: Đường dẫn phải chính xác từ vị trí file index.php này đi vào thư mục controller
-if (file_exists('./controller/CourseController.php')) {
-    require_once './controller/CourseController.php';
-} else {
-    die("Lỗi: Không tìm thấy file Controller tại './controller/CourseController.php'");
+// 1. Khởi tạo Session
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 
-// 2. Khởi tạo Controller
-$controller = new CourseController();
+// 2. Kết nối Database
+require_once './config/Database.php';
 
-// 3. Lấy 'action' từ URL (mặc định là 'index')
-// Ví dụ: http://localhost/project/index.php?action=show&id=5
-$action = isset($_GET['action']) ? $_GET['action'] : 'index';
+// 3. Lấy tham số từ URL
+$controller = isset($_GET['controller']) ? $_GET['controller'] : 'home';
+$action     = isset($_GET['action']) ? $_GET['action'] : 'index';
 
-// 4. Điều hướng (Switch case)
-switch ($action) {
-    case 'index':
-        // Gọi hàm index() để hiển thị trang chủ/danh sách
-        $controller->index();
-        break;
+// 4. Chuẩn hóa tên Class 
+$controllerName = ucfirst(strtolower($controller)) . 'Controller';
 
-    case 'show':
-        // Gọi hàm show() để xem chi tiết
-        $controller->show();
-        break;
+// 5. ĐƯỜNG DẪN FILE 
+$controllerPath = "./controller/" . $controllerName . ".php";
 
-    default:
-        // Mặc định về trang chủ
-        $controller->index();
-        break;
+if (file_exists($controllerPath)) {
+    require_once $controllerPath;
+
+    if (class_exists($controllerName)) {
+        $object = new $controllerName();
+
+        if (method_exists($object, $action)) {
+            $object->$action();
+        } else {
+            die("Lỗi: Không tìm thấy action '<b>$action</b>' trong Controller '<b>$controllerName</b>'.");
+        }
+    } else {
+        die("Lỗi: File '$controllerPath' có tồn tại, nhưng không tìm thấy class '<b>$controllerName</b>' bên trong. Hãy kiểm tra tên class.");
+    }
+} else {
+    die("Lỗi 404: Không tìm thấy file Controller tại: <b>$controllerPath</b>");
 }
 ?>
