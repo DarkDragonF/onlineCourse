@@ -1,34 +1,37 @@
 <?php
-// Nạp file Database
-require_once "config/Database.php";
-
-// Kết nối DB
-$db = Database::connect();
-
-// Lấy controller và action từ URL
-$controllerName = isset($_GET["controller"]) ? $_GET["controller"] : "course";
-$actionName     = isset($_GET["action"]) ? $_GET["action"] : "index";
-
-// Chuyển đổi tên controller: course → CourseController
-$controllerClass = ucfirst($controllerName) . "Controller";
-$controllerFile  = "controller/" . $controllerClass . ".php";
-
-// Kiểm tra file controller có tồn tại không
-if (!file_exists($controllerFile)) {
-    die("❌ Không tìm thấy controller: $controllerClass");
+// 1. Khởi tạo Session
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 
-// Nạp file controller
-require_once $controllerFile;
+// 2. Kết nối Database
+require_once './config/Database.php';
 
-// Tạo object controller
-$controller = new $controllerClass($db);
+// 3. Lấy tham số từ URL
+$controller = isset($_GET['controller']) ? $_GET['controller'] : 'home';
+$action     = isset($_GET['action']) ? $_GET['action'] : 'index';
 
-// Kiểm tra action có tồn tại trong controller không
-if (!method_exists($controller, $actionName)) {
-    die("❌ Không tìm thấy action: $actionName trong $controllerClass");
+// 4. Chuẩn hóa tên Class 
+$controllerName = ucfirst(strtolower($controller)) . 'Controller';
+
+// 5. ĐƯỜNG DẪN FILE 
+$controllerPath = "./controller/" . $controllerName . ".php";
+
+if (file_exists($controllerPath)) {
+    require_once $controllerPath;
+
+    if (class_exists($controllerName)) {
+        $object = new $controllerName();
+
+        if (method_exists($object, $action)) {
+            $object->$action();
+        } else {
+            die("Lỗi: Không tìm thấy action '<b>$action</b>' trong Controller '<b>$controllerName</b>'.");
+        }
+    } else {
+        die("Lỗi: File '$controllerPath' có tồn tại, nhưng không tìm thấy class '<b>$controllerName</b>' bên trong. Hãy kiểm tra tên class.");
+    }
+} else {
+    die("Lỗi 404: Không tìm thấy file Controller tại: <b>$controllerPath</b>");
 }
-
-// Gọi action
-$controller->$actionName();
 ?>
