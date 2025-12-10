@@ -1,5 +1,5 @@
 <?php
-// Gọi file cấu hình DB. Hãy chắc chắn đường dẫn và tên file (hoa/thường) là đúng.
+// Gọi file cấu hình DB.
 require_once './config/Database.php';
 
 class Course {
@@ -7,22 +7,24 @@ class Course {
     private $table_name = "courses";
 
     public function __construct() {
-        $database = new Database();
-        $this->conn = $database->getConnection(); 
+        $this->conn = Database::getInstance();
     }
 
     // ================================================================
     // PHẦN 1: QUẢN TRỊ (ADMIN/INSTRUCTOR) - THÊM SỬA XÓA
     // ================================================================
 
-    // Tạo khóa học mới (Lấy từ đoạn code 1)
+    // Tạo khóa học mới
     public function create($data) {
         $query = "INSERT INTO " . $this->table_name . " 
                   (title, description, instructor_id, category_id, price, duration_weeks, level, image)
                   VALUES (:title, :description, :instructor_id, :category_id, :price, :duration_weeks, :level, :image)";
 
         $stmt = $this->conn->prepare($query);
+
+        // Làm sạch dữ liệu đầu vào (cơ bản)
         $data['title'] = htmlspecialchars(strip_tags($data['title']));
+        // $data['description'] thường không dùng strip_tags nếu dùng CKEditor, nhưng cần cẩn thận XSS
 
         return $stmt->execute([
             ':title'          => $data['title'],
@@ -40,7 +42,7 @@ class Course {
     // PHẦN 2: HIỂN THỊ (FRONTEND) - LẤY DỮ LIỆU
     // ================================================================
 
-    // 1. Lấy danh sách khóa học MỚI NHẤT (Cho Trang Chủ)
+    // 1. Lấy danh sách khóa học MỚI NHẤT
     public function getNewCourses($limit = 6) {
         $query = "SELECT c.*, u.fullname as instructor_name 
                   FROM " . $this->table_name . " c
@@ -55,13 +57,14 @@ class Course {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // 2. Lấy khóa học NỔI BẬT (Cho Slider hoặc mục Hot)
+    // 2. Lấy khóa học NỔI BẬT
     public function getFeaturedCourses($limit = 3) {
-        // Tạm thời lấy các khóa học có level là 'Advanced' hoặc lấy theo ID, tùy logic của bạn
         $query = "SELECT c.*, u.fullname as instructor_name 
                   FROM " . $this->table_name . " c
                   LEFT JOIN users u ON c.instructor_id = u.id
-                  LIMIT :limit"; // Có thể thêm WHERE is_featured = 1 nếu bảng có cột đó
+                  -- Có thể thêm điều kiện WHERE level = 'Advanced' hoặc is_featured = 1
+                  ORDER BY c.price DESC 
+                  LIMIT :limit"; 
         
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
@@ -70,7 +73,7 @@ class Course {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // 3. Lấy TẤT CẢ khóa học (Cho trang Danh sách khóa học)
+    // 3. Lấy TẤT CẢ khóa học (Kèm tên giảng viên và danh mục)
     public function getAllCourses() {
         $query = "SELECT c.*, u.fullname as instructor_name, cat.name as category_name
                   FROM " . $this->table_name . " c

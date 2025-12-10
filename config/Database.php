@@ -1,21 +1,27 @@
 <?php
 class Database {
-    private $host = 'localhost';
-    private $db_name = 'testbtl';
-    private $username = 'root';
-    private $password = ''; 
+    private static $instance = null;
     public $conn;
 
-    public function getConnection() {
-        $this->conn = null;
+    private function __construct() {
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "onlinecourse";
+
         try {
-            $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
-            $this->conn->exec("set names utf8");
+            $this->conn = new PDO("mysql:host=$servername; dbname=$dbname;charset=utf8", $username, $password);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch(PDOException $exception) {
-            echo "Lỗi kết nối: " . $exception->getMessage();
+        } catch(PDOException $e) {
+            die("Connection failed: " . $e->getMessage());
         }
-        return $this->conn;
+    }
+
+    public static function getInstance() {
+        if (!self::$instance) {
+            self::$instance = new Database();
+        }
+        return self::$instance->conn;
     }
 }
 ?>

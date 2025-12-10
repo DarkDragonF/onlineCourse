@@ -1,4 +1,5 @@
 <?php
+// Giả định file này nằm trong thư mục controllers/
 require_once './config/Database.php';
 require_once './models/Course.php';
 
@@ -8,43 +9,34 @@ class CourseController {
     private $db; 
 
     public function __construct() {
-        // 1. Khởi tạo Model Course
         $this->courseModel = new Course();
 
-        // 2. Khởi tạo kết nối DB (để dùng cho các truy vấn phụ như lấy category, instructor)
-        $database = new Database();
-        $this->db = $database->getConnection(); 
+        $this->db = Database::getInstance(); 
     }
 
     // =================================================================
     // KHU VỰC CLIENT (Dành cho người xem/học viên)
     // =================================================================
 
-    // 1. Trang chủ: Hiển thị slider và danh sách khóa học mới
+    // 1. Trang chủ
     public function index() {
-        // Lấy 3 khóa nổi bật
         $featuredCourses = $this->courseModel->getFeaturedCourses(3); 
-        // Lấy 6 khóa mới nhất
         $newCourses = $this->courseModel->getNewCourses(6);        
-        // Gọi View trang chủ
-        // Bạn hãy kiểm tra lại đường dẫn file view này trong thư mục của bạn
-        require_once './views/viewcourse.php';
+        require_once './views/home/index.php'; 
     }
 
-    // 2. Chi tiết khóa học: Xem thông tin cụ thể
-    public function detail() { // Đổi tên show -> detail cho rõ nghĩa
+    // 2. Chi tiết khóa học
+    public function detail() { 
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
-            
             $course = $this->courseModel->getCourseById($id);
 
             if (!$course) {
-                echo "Khóa học không tồn tại!";
+                echo "Khóa học không tồn tại!"; // Hoặc redirect về trang 404
                 return;
             }
 
-            // Gọi View chi tiết
-            require_once './views/courses/detail.php'; // Đã chuẩn hóa đường dẫn
+            require_once './views/courses/detail.php'; 
         } else {
             header("Location: index.php");
         }
@@ -54,24 +46,22 @@ class CourseController {
     // KHU VỰC ADMIN (Dành cho quản trị viên)
     // =================================================================
 
-    // 3. Danh sách quản lý (Trước đây là hàm index của snippet 1)
+    // 3. Danh sách quản lý
     public function list() {
-        // Dùng hàm getAllCourses đã merge ở Model bài trước
         $courses = $this->courseModel->getAllCourses();
-        
-        // Gọi View admin (đổi tên file view nếu cần để tránh trùng với trang chủ)
         require_once "./views/courses/list.php"; 
     }
 
     // 4. Form tạo khóa học mới
     public function create() {
-        // Truy vấn trực tiếp để lấy danh mục (Categories)
+        
+        // Lấy danh mục
         $stmtCat = $this->db->prepare("SELECT * FROM categories");
         $stmtCat->execute();
         $categories = $stmtCat->fetchAll(PDO::FETCH_ASSOC);
 
-        // Truy vấn trực tiếp lấy giảng viên (Instructors - role = 1)
-        $stmtIns = $this->db->prepare("SELECT * FROM users WHERE role = 1");
+        // Lấy giảng viên
+        $stmtIns = $this->db->prepare("SELECT * FROM users WHERE role = 1"); // Giả sử 1 là role giảng viên
         $stmtIns->execute();
         $instructors = $stmtIns->fetchAll(PDO::FETCH_ASSOC);
 
@@ -80,36 +70,42 @@ class CourseController {
 
     // 5. Lưu khóa học vào CSDL
     public function store() {
-        // Xử lý upload ảnh
-        $image = "";
-        if (!empty($_FILES["image"]["name"])) {
-            $target_dir = "uploads/";
-            // Tạo tên file duy nhất để tránh trùng
-            $target_file = $target_dir . time() . "_" . basename($_FILES["image"]["name"]);
-            
-            if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-                $image = $target_file;
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Xử lý upload ảnh
+            $image = "";
+            if (!empty($_FILES["image"]["name"])) {
+                $target_dir = "uploads/";
+                // Kiểm tra xem thư mục có tồn tại không, nếu không thì tạo
+                if (!file_exists($target_dir)) {
+                    mkdir($target_dir, 0777, true);
+                }
+                
+                $target_file = $target_dir . time() . "_" . basename($_FILES["image"]["name"]);
+                
+                if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                    $image = $target_file;
+                }
             }
-        }
 
-        // Chuẩn bị dữ liệu
-        $data = [
-            "title"          => $_POST["title"],
-            "description"    => $_POST["description"],
-            "instructor_id"  => $_POST["instructor_id"],
-            "category_id"    => $_POST["category_id"],
-            "price"          => $_POST["price"],
-            "duration_weeks" => $_POST["duration_weeks"],
-            "level"          => $_POST["level"],
-            "image"          => $image,
-        ];
+            // Chuẩn bị dữ liệu
+            $data = [
+                "title"          => $_POST["title"] ?? '',
+                "description"    => $_POST["description"] ?? '',
+                "instructor_id"  => $_POST["instructor_id"] ?? 0,
+                "category_id"    => $_POST["category_id"] ?? 0,
+                "price"          => $_POST["price"] ?? 0,
+                "duration_weeks" => $_POST["duration_weeks"] ?? 0,
+                "level"          => $_POST["level"] ?? 'Beginner',
+                "image"          => $image,
+            ];
 
-        // Gọi Model để lưu
-        if ($this->courseModel->create($data)) {
-            // Thành công thì về trang danh sách quản lý
-            header("Location: index.php?controller=course&action=list");
-        } else {
-            echo "Có lỗi xảy ra khi tạo khóa học.";
+            // Gọi Model để lưu
+            if ($this->courseModel->create($data)) {
+                // Redirect về trang danh sách
+                header("Location: index.php?controller=course&action=list");
+            } else {
+                echo "Có lỗi xảy ra khi tạo khóa học.";
+            }
         }
     }
 }
