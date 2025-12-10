@@ -1,22 +1,21 @@
 <?php
-// config/Database.php
 class Database {
-    private static $instance = null;
+    private $host = 'localhost';
+    private $db_name = 'testbtl';
+    private $username = 'root';
+    private $password = ''; 
     public $conn;
 
-    private function __construct() {
+    public function getConnection() {
+        $this->conn = null;
         try {
-            $this->conn = new PDO("mysql:host=localhost;dbname=onlinecourse;charset=utf8", "root", "");
+            $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
+            $this->conn->exec("set names utf8");
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            die("Lỗi kết nối DB: " . $e->getMessage());
+        } catch(PDOException $exception) {
+            echo "Lỗi kết nối: " . $exception->getMessage();
         }
-    }
-    public static function getInstance() {
-        if (!self::$instance) {
-            self::$instance = new Database();
-        }
-        return self::$instance->conn;
+        return $this->conn;
     }
 }
 ?>
