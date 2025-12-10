@@ -50,6 +50,7 @@ class AuthController {
                 $_SESSION['role'] = $user['role'];
                 
                 switch ($user['role']) {
+                    //check sau khi merge
                     case 0:
                         header('Location: index.php?controller=student&action=dashboard');
                         break;
@@ -91,6 +92,10 @@ class AuthController {
                 $errors[] = "Tên đăng nhập không được để trống.";
             } else if (strlen($userName) < 4) {
                 $errors[] = "Tên đăng nhập phải có ít nhất 4 ký tự.";
+            } 
+            $existingUser = $this->userModel->getUserByUsername($userName);
+            if ($existingUser) {
+                $errors[] = "Tên đăng nhập '$userName' đã có người sử dụng. Vui lòng chọn tên khác!";
             }
 
             // Email
@@ -130,10 +135,11 @@ class AuthController {
                 return; 
             }
 
-            $isCreated = $this->userModel->studentRegister($userName, $email, $password, $fullname);
+            $isCreated = $this->userModel->studentRegister($userName, $email, $password, $fullname, $role);
 
             if($isCreated){
-                header('Location: index.php?controller=auth&action=login');
+                //thêm sau khi merge
+                header('...');
                 exit;
             } else {
                 $errors[] = 'Lỗi hệ thống, không thể tạo tài khoản lúc này!';

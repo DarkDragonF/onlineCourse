@@ -10,9 +10,9 @@ class User{
     public function studentRegister($username, $email, $password, $fullname, $role){
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-        $sql = "INSERT INTO users($username, $email, $password, $fullname, $role) VALUES(?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO users(username, email, password, fullname, role) VALUES(?, ?, ?, ?, ?)";
         $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$username, $email, $password, $fullname, $role]);
+        return $stmt->execute([$username, $email, $hashed_password, $fullname, $role]);
     }
     //check đăng nhập bằng email
     public function getUserByEmail($email){
@@ -26,6 +26,13 @@ class User{
         $stmt = $this->db->prepare("SELECT * FROM users");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getUserByUsername($username){
+        $sql = "SELECT * FROM users WHERE username = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$username]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
 
