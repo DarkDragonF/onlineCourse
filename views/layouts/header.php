@@ -1,3 +1,4 @@
+<!-- version 1.1.1 -->
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -55,7 +56,7 @@
                     <li class="nav-item dropdown ms-lg-3">
                         <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
                             <span class="me-2 d-none d-lg-block fw-bold text-dark">
-                                <?= htmlspecialchars($_SESSION['user_fullname'] ?? 'User') ?>
+                                <?= htmlspecialchars($_SESSION['user_name'] ?? 'User') ?>
                             </span>
                             <img src="<?= $_SESSION['user_avatar'] ?? 'assets/img/default-avatar.png' ?>" class="rounded-circle user-avatar" alt="Avatar">
                         </a>

@@ -1,4 +1,5 @@
 <?php
+//version 1.1.1
 // Gọi file cấu hình DB.
 require_once './config/Database.php';
 

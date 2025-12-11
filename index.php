@@ -1,5 +1,5 @@
 <?php
-//version 1.1.0
+//version 1.1.1
 // 1. Khởi tạo Session
 if (session_status() === PHP_SESSION_NONE) {
     session_start();

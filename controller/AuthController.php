@@ -70,7 +70,6 @@ class AuthController {
                 $_SESSION['role'] = $user['role'];
                 
                 switch ($user['role']) {
-                    //check sau khi merge
                     case 0:
                         header('Location: index.php?controller=student&action=dashboard');
                         break;
@@ -159,7 +158,7 @@ class AuthController {
 
             if($isCreated){
                 //thêm sau khi merge
-                header('...');
+                header('Location: index.php');
                 exit;
             } else {
                 $errors[] = 'Lỗi hệ thống, không thể tạo tài khoản lúc này!';
