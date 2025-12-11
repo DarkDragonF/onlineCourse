@@ -1,0 +1,69 @@
+    /* --- FOOTER STYLES --- */
+    .footer {
+        background-color: #1c1f26;
+        color: #aeb4be;
+        padding: 60px 0 30px;
+        margin-top: auto;
+        /* Đẩy footer xuống đáy */
+    }
+
+    .footer h5 {
+        color: #fff;
+        font-weight: 700;
+        margin-bottom: 25px;
+        font-size: 1.1rem;
+    }
+
+    .footer-desc {
+        line-height: 1.8;
+        font-size: 0.95rem;
+        margin-bottom: 20px;
+    }
+
+    .footer-links {
+        list-style: none;
+        padding: 0;
+    }
+
+    .footer-links li {
+        margin-bottom: 12px;
+    }
+
+    .footer-links a {
+        color: #aeb4be;
+        text-decoration: none;
+        transition: all 0.2s;
+        font-size: 0.95rem;
+    }
+
+    .footer-links a:hover {
+        color: #fff;
+        padding-left: 5px;
+        /* Hiệu ứng di chuyển nhẹ */
+    }
+
+    .social-icons a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-radius: 50%;
+        margin-right: 10px;
+        transition: all 0.3s;
+        text-decoration: none;
+    }
+
+    .social-icons a:hover {
+        background-color: var(--accent-color);
+        transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 25px;
+        margin-top: 40px;
+        font-size: 0.9rem;
+    }

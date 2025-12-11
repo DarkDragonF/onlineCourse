@@ -35,22 +35,38 @@
         <div class="row">
             <div class="col-md-2 sidebar">
                 <h4 class="text-center mb-4">Admin Panel</h4>
-                <a href="index.php?controller=admin&action=dashboard" class="<?= ($_GET['action']=='dashboard') ? 'active' : '' ?>">
+                
+                <?php $act = $_GET['action'] ?? 'dashboard'; ?>
+
+                <a href="index.php?controller=admin&action=dashboard" class="<?= ($act=='dashboard') ? 'active' : '' ?>">
                     <i class="fas fa-tachometer-alt me-2"></i> Dashboard
                 </a>
-                <a href="index.php?controller=admin&action=listUsers" class="<?= ($_GET['action']=='listUsers') ? 'active' : '' ?>">
+                <a href="index.php?controller=admin&action=listUsers" class="<?= ($act=='listUsers') ? 'active' : '' ?>">
                     <i class="fas fa-users me-2"></i> Quản lý Users
                 </a>
-                <a href="index.php?controller=admin&action=listCategories" class="<?= ($_GET['action']=='listCategories') ? 'active' : '' ?>">
+                <a href="index.php?controller=admin&action=listCategories" class="<?= ($act=='listCategories') ? 'active' : '' ?>">
                     <i class="fas fa-list me-2"></i> Quản lý Danh mục
                 </a>
+                <a href="index.php?controller=course&action=list" class="<?= ($_GET['controller']=='course') ? 'active' : '' ?>">
+                    <i class="fas fa-book me-2"></i> Quản lý Khóa học
+                </a>
+
                 <a href="index.php" class="mt-5 border-top border-secondary">
                     <i class="fas fa-sign-out-alt me-2"></i> Quay về Trang chủ
                 </a>
             </div>
 
             <div class="col-md-10 main-content">
-                <?php require_once $view_path; ?> 
+                <?php 
+                // SỬA LỖI Ở ĐÂY:
+                // 1. Dùng đúng tên biến $viewPath (khớp với Controller)
+                // 2. Kiểm tra file tồn tại để tránh lỗi Fatal Error
+                if (isset($viewPath) && file_exists($viewPath)) {
+                    require_once $viewPath;
+                } else {
+                    echo '<div class="alert alert-danger">Lỗi: Không tìm thấy View. <br> Đường dẫn: ' . ($viewPath ?? 'Chưa định nghĩa') . '</div>';
+                }
+                ?> 
             </div>
         </div>
     </div>
