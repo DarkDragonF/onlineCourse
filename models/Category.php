@@ -1,4 +1,5 @@
 <?php
+//version 1.1.0
 require_once 'config/Database.php';
 
 class Category {

@@ -1,5 +1,6 @@
 <?php
 class Database {
+    //version 1.1.0
     private static $instance = null;
     public $conn;
 
