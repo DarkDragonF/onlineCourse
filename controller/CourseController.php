@@ -1,5 +1,5 @@
 <?php
-// Giả định file này nằm trong thư mục controllers/
+// Gọi các file cấu hình và Model
 require_once './config/Database.php';
 require_once './models/Course.php';
 
@@ -10,7 +10,6 @@ class CourseController {
 
     public function __construct() {
         $this->courseModel = new Course();
-
         $this->db = Database::getInstance(); 
     }
 
@@ -27,17 +26,24 @@ class CourseController {
 
     // 2. Chi tiết khóa học
     public function detail() { 
+        // Kiểm tra xem trên URL có tham số id không
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
+            
+            // Gọi Model để lấy thông tin khóa học
             $course = $this->courseModel->getCourseById($id);
 
+            // Nếu không tìm thấy khóa học trong CSDL
             if (!$course) {
-                echo "Khóa học không tồn tại!"; // Hoặc redirect về trang 404
+                echo "Khóa học không tồn tại!"; 
                 return;
             }
 
-            require_once './views/courses/detail.php'; 
+            // Gọi View hiển thị
+            // LƯU Ý: Đường dẫn ở đây là 'views/course/' (không có chữ s) theo thư mục của bạn
+            require_once './views/course/detail.php'; 
         } else {
+            // Nếu không có ID thì quay về trang chủ
             header("Location: index.php");
         }
     }
@@ -49,6 +55,9 @@ class CourseController {
     // 3. Danh sách quản lý
     public function list() {
         $courses = $this->courseModel->getAllCourses();
+        
+        // Kiểm tra xem thư mục admin của bạn là 'courses' hay 'course'
+        // Nếu chạy bị lỗi "failed to open stream", hãy sửa dòng dưới thành: ./views/course/list.php
         require_once "./views/courses/list.php"; 
     }
 
@@ -60,11 +69,12 @@ class CourseController {
         $stmtCat->execute();
         $categories = $stmtCat->fetchAll(PDO::FETCH_ASSOC);
 
-        // Lấy giảng viên
-        $stmtIns = $this->db->prepare("SELECT * FROM users WHERE role = 1"); // Giả sử 1 là role giảng viên
+        // Lấy giảng viên (Role = 1)
+        $stmtIns = $this->db->prepare("SELECT * FROM users WHERE role = 1"); 
         $stmtIns->execute();
         $instructors = $stmtIns->fetchAll(PDO::FETCH_ASSOC);
 
+        // Tương tự, kiểm tra đường dẫn view create
         require_once "./views/courses/create.php";
     }
 
@@ -75,7 +85,6 @@ class CourseController {
             $image = "";
             if (!empty($_FILES["image"]["name"])) {
                 $target_dir = "uploads/";
-                // Kiểm tra xem thư mục có tồn tại không, nếu không thì tạo
                 if (!file_exists($target_dir)) {
                     mkdir($target_dir, 0777, true);
                 }
@@ -108,5 +117,6 @@ class CourseController {
             }
         }
     }
-}
+
+} // Kết thúc Class CourseController
 ?>
