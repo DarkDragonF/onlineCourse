@@ -20,7 +20,7 @@ class CourseController {
     // 1. Trang chủ
     public function index() {
         $featuredCourses = $this->courseModel->getFeaturedCourses(3); 
-        $newCourses = $this->courseModel->getNewCourses(6);        
+        $newCourses = $this->courseModel->getNewCourses(6);       
         require_once './views/home/index.php'; 
     }
 
@@ -40,8 +40,12 @@ class CourseController {
             }
 
             // Gọi View hiển thị
-            // LƯU Ý: Đường dẫn ở đây là 'views/course/' (không có chữ s) theo thư mục của bạn
-            require_once './views/course/detail.php'; 
+            if (file_exists('./views/course/detail.php')) {
+                require_once './views/course/detail.php'; 
+            } else {
+                require_once './views/course/detail.php'; 
+            }
+
         } else {
             // Nếu không có ID thì quay về trang chủ
             header("Location: index.php");
@@ -56,9 +60,9 @@ class CourseController {
     public function list() {
         $courses = $this->courseModel->getAllCourses();
         
-        // Kiểm tra xem thư mục admin của bạn là 'courses' hay 'course'
-        // Nếu chạy bị lỗi "failed to open stream", hãy sửa dòng dưới thành: ./views/course/list.php
-        require_once "./views/courses/list.php"; 
+        // GIẢI QUYẾT CONFLICT: Sử dụng đường dẫn 'courses' (số nhiều)
+        // vì đây là thư mục chúng ta đã tạo ở các bước trước.
+        require_once "./views/course/list.php"; 
     }
 
     // 4. Form tạo khóa học mới
@@ -74,8 +78,7 @@ class CourseController {
         $stmtIns->execute();
         $instructors = $stmtIns->fetchAll(PDO::FETCH_ASSOC);
 
-        // Tương tự, kiểm tra đường dẫn view create
-        require_once "./views/courses/create.php";
+        require_once "./views/course/create.php";
     }
 
     // 5. Lưu khóa học vào CSDL
@@ -118,5 +121,5 @@ class CourseController {
         }
     }
 
-} // Kết thúc Class CourseController
+} 
 ?>
