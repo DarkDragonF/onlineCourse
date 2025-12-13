@@ -106,8 +106,7 @@
                     </h2>
 
                     <div class="d-grid gap-2 mb-3">
-                        <a href="index.php?controller=enrollment&action=register&course_id=<?= $course['id'] ?>" class="btn btn-primary btn-lg fw-bold">
-                            ĐĂNG KÝ HỌC NGAY
+                        <a href="index.php?controller=enrollment&action=checkout&course_id=<?= $course['id'] ?>" class="btn btn-primary btn-lg fw-bold">                            ĐĂNG KÝ HỌC NGAY
                         </a>
                         <button class="btn btn-outline-secondary">Thêm vào giỏ hàng</button>
                     </div>
