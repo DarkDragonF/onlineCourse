@@ -1,5 +1,5 @@
 <?php require_once './views/layouts/header.php'; ?>
-
+<!-- version 1.1.2 -->
 <style>
     /* CSS Giữ nguyên như cũ */
     body { background-color: #f5f7fa; }

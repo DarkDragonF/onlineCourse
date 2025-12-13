@@ -1,5 +1,5 @@
 <?php
-// version 1.1.1
+// version 1.1.2
 require_once './models/Course.php';
 require_once './models/Enrollment.php';
 
