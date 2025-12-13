@@ -1,5 +1,5 @@
 <?php
-//version 1.1.1
+//version 1.1.3
 // Gọi file cấu hình DB.
 require_once './config/Database.php';
 
@@ -119,5 +119,26 @@ class Course {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    // 6. Lọc khóa học theo category
+    public function getCoursesByCategoryId($categoryId) {
+        $query = "SELECT 
+                    c.*, 
+                    u.fullname as instructor_name
+                  FROM " . $this->table_name . " c
+                  LEFT JOIN users u ON c.instructor_id = u.id
+                  WHERE c.category_id = :category_id
+                  ORDER BY c.created_at DESC";
+
+        $stmt = $this->conn->prepare($query);
+    
+        $stmt->bindParam(':category_id', $categoryId);
+        
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
+   
+    
 ?>

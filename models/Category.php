@@ -1,5 +1,5 @@
 <?php
-// version 1.1.2
+// version 1.1.3
 require_once 'config/Database.php';
 
 class Category {
@@ -17,10 +17,14 @@ class Category {
     }
 
     public function getById($id) {
-        $stmt = $this->conn->prepare("SELECT * FROM " . $this->table . " WHERE id = :id");
-        $stmt->bindParam(':id', $id);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt = $this->conn->prepare("SELECT name FROM " . $this->table . " WHERE id = :id");
+        $stmt->execute([':id' => $id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($row) {
+            return $row['name']; 
+        } else {
+            return "Danh mục";
+        }
     }
 
     public function create($name, $description) {

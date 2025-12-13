@@ -1,7 +1,7 @@
 <?php
 require_once './models/Course.php';
 require_once './models/Enrollment.php';
-
+//version 1.1.3
 class EnrollmentController {
     
     // 1. Hiển thị trang Thanh toán (Checkout)

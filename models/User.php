@@ -1,5 +1,5 @@
 <?php
-//version 1.1.1
+//version 1.1.3
 require_once 'config/Database.php';
 
 class User {

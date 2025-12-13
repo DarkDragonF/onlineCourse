@@ -1,4 +1,5 @@
 <?php
+//version 1.1.3
 // Gọi các file cấu hình và Model
 require_once './config/Database.php';
 require_once './models/Course.php';
@@ -49,6 +50,24 @@ class CourseController {
         } else {
             // Nếu không có ID thì quay về trang chủ
             header("Location: index.php");
+        }
+    }
+
+    // 6. Hiển thị khóa học theo danh mục
+    public function category() {
+        if (isset($_GET['id'])) {
+            $catId = $_GET['id'];
+
+            require_once './models/Category.php';
+            $categoryModel = new Category();
+            
+            $categoryName = $categoryModel->getById($catId);
+
+            $courses = $this->courseModel->getCoursesByCategoryId($catId);
+
+            require_once './views/course/category.php';
+        } else {
+            header("Location: index.php?controller=course&action=list");
         }
     }
 

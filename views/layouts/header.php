@@ -33,6 +33,29 @@
             </form>
 
             <ul class="navbar-nav align-items-center ms-auto">
+                <li class="nav-item dropdown me-2"> <a class="nav-link dropdown-toggle fw-bold text-dark" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-grid me-1"></i> Danh mục
+                </a>
+                    <ul class="dropdown-menu shadow border-0 mt-2" aria-labelledby="categoryDropdown">
+                        <?php
+                        // Load danh mục từ Database trực tiếp tại Header
+                        if (file_exists('./models/Category.php')) {
+                            require_once './models/Category.php';
+                            $catModelHeader = new Category();
+                            $categoriesHeader = $catModelHeader->getAll();
+
+                            if (!empty($categoriesHeader)) {
+                                foreach ($categoriesHeader as $cat) {
+                                    echo '<li><a class="dropdown-item" href="index.php?controller=course&action=category&id=' . $cat['id'] . '">' . htmlspecialchars($cat['name']) . '</a></li>';
+                                }
+                            } else {
+                                echo '<li><span class="dropdown-item text-muted">Chưa có danh mục</span></li>';
+                            }
+                        }
+                        ?>
+                        <li><hr class="dropdown-divider"></li>
+                    </ul>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="index.php?controller=course&action=list">Khóa học</a>
                 </li>

@@ -1,7 +1,6 @@
 <?php require_once './views/layouts/header.php'; ?>
-<!-- version 1.1.2 -->
+<!-- version 1.1.3 -->
 <style>
-    /* CSS Giữ nguyên như cũ */
     body { background-color: #f5f7fa; }
     .dashboard-sidebar { background: white; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); overflow: hidden; }
     .user-card-header { background: linear-gradient(135deg, var(--primary-color), #283593); padding: 30px 20px; text-align: center; color: white; }
@@ -35,10 +34,6 @@
                     </a>
                     <a href="#" class="menu-link">
                         <i class="bi bi-gear me-2"></i> Cài đặt tài khoản
-                    </a>
-                    <div class="border-top my-2"></div>
-                    <a href="index.php?controller=auth&action=logout" class="menu-link text-danger">
-                        <i class="bi bi-box-arrow-right me-2"></i> Đăng xuất
                     </a>
                 </div>
             </div>

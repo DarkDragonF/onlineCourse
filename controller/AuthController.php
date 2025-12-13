@@ -1,4 +1,5 @@
 <?php
+//version 1.1.3
 require_once "./models/User.php";
 
 class AuthController {
@@ -16,7 +17,6 @@ class AuthController {
     // --- ĐĂNG NHẬP ---
     public function login(){
         if (session_status() === PHP_SESSION_NONE) session_start();
-
         if (isset($_SESSION['user_id'])) {
             header("Location: index.php?controller=home&action=dashboard");
             exit();
@@ -70,11 +70,18 @@ class AuthController {
             $user = $this->userModel->getUserByEmail($email);
 
             if($user && password_verify($password, $user['password'])){
+
+                if ($user['status'] == 0) {
+                    $errors[] = "Tài khoản đã bị vô hiệu hóa bởi admin!";
+                    require "./views/auth/login.php";
+                    return;
+                }
+                
                 // Lưu session
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_name'] = $user['fullname'];
                 $_SESSION['role'] = $user['role'];
-                
+
                 switch ($user['role']) {
                     case 0:
                         header('Location: index.php?controller=home&action=dashboard');

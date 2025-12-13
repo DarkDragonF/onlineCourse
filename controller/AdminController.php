@@ -1,4 +1,5 @@
 <?php
+//version 1.1.3
 // Gọi các Models cần thiết
 require_once './models/Category.php';
 require_once './models/User.php';
@@ -22,7 +23,7 @@ class AdminController {
     // 1. Dashboard
     public function dashboard() {
         $catModel = new Category();
-        $userModel = new User(); // Cần đảm bảo file User.php đã có class này
+        $userModel = new User(); 
         
         $data['countCat'] = $catModel->count();
         $data['countUser'] = $userModel->count(); 
@@ -34,7 +35,6 @@ class AdminController {
     // 2. Quản lý Users
     public function listUsers() {
         $userModel = new User();
-        // Cần đảm bảo User Model có hàm getAllUsers()
         $data['users'] = $userModel->getAllUsers(); 
         $this->render('users/index', $data);
     }
@@ -45,7 +45,6 @@ class AdminController {
             // Logic đảo trạng thái: Nếu đang 1 thì thành 0, ngược lại
             $newStatus = $_GET['status'] == 1 ? 0 : 1;
             
-            // Cần đảm bảo User Model có hàm toggleStatus
             $userModel->toggleStatus($_GET['id'], $newStatus);
         }
         header("Location: index.php?controller=admin&action=listUsers");
