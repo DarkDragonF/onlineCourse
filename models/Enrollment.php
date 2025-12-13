@@ -9,12 +9,32 @@ class Enrollment {
         $this->conn = Database::getInstance();
     }
 
+  
+    public function isEnrolled($studentId, $courseId) {
+        $query = "SELECT id FROM " . $this->table . " WHERE student_id = :student_id AND course_id = :course_id LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([':student_id' => $studentId, ':course_id' => $courseId]);
+        return $stmt->fetch();
+    }
+
+    public function create($studentId, $courseId) {
+        $query = "INSERT INTO " . $this->table . " 
+                  (student_id, course_id, status, progress, enrolled_date) 
+                  VALUES (:student_id, :course_id, 'active', 0, NOW())";
+        
+        $stmt = $this->conn->prepare($query);
+        return $stmt->execute([
+            ':student_id' => $studentId,
+            ':course_id' => $courseId
+        ]);
+    }
+
     // Lấy danh sách khóa học của học viên
     public function getMyCourses($studentId) {
         $query = "SELECT 
                     e.progress, 
                     e.enrolled_date, 
-                    e.status,         
+                    e.status,          
                     c.id as course_id,
                     c.title, 
                     c.image, 

@@ -1,5 +1,5 @@
 <?php
-// Giả định file này nằm trong thư mục controllers/
+// Gọi các file cấu hình và Model
 require_once './config/Database.php';
 require_once './models/Course.php';
 
@@ -10,7 +10,6 @@ class CourseController {
 
     public function __construct() {
         $this->courseModel = new Course();
-
         $this->db = Database::getInstance(); 
     }
 
@@ -21,23 +20,34 @@ class CourseController {
     // 1. Trang chủ
     public function index() {
         $featuredCourses = $this->courseModel->getFeaturedCourses(3); 
-        $newCourses = $this->courseModel->getNewCourses(6);        
+        $newCourses = $this->courseModel->getNewCourses(6);       
         require_once './views/home/index.php'; 
     }
 
     // 2. Chi tiết khóa học
     public function detail() { 
+        // Kiểm tra xem trên URL có tham số id không
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
+            
+            // Gọi Model để lấy thông tin khóa học
             $course = $this->courseModel->getCourseById($id);
 
+            // Nếu không tìm thấy khóa học trong CSDL
             if (!$course) {
-                echo "Khóa học không tồn tại!"; // Hoặc redirect về trang 404
+                echo "Khóa học không tồn tại!"; 
                 return;
             }
 
-            require_once './views/course/detail.php'; 
+            // Gọi View hiển thị
+            if (file_exists('./views/course/detail.php')) {
+                require_once './views/course/detail.php'; 
+            } else {
+                require_once './views/course/detail.php'; 
+            }
+
         } else {
+            // Nếu không có ID thì quay về trang chủ
             header("Location: index.php");
         }
     }
@@ -49,6 +59,9 @@ class CourseController {
     // 3. Danh sách quản lý
     public function list() {
         $courses = $this->courseModel->getAllCourses();
+        
+        // GIẢI QUYẾT CONFLICT: Sử dụng đường dẫn 'courses' (số nhiều)
+        // vì đây là thư mục chúng ta đã tạo ở các bước trước.
         require_once "./views/course/list.php"; 
     }
 
@@ -60,8 +73,8 @@ class CourseController {
         $stmtCat->execute();
         $categories = $stmtCat->fetchAll(PDO::FETCH_ASSOC);
 
-        // Lấy giảng viên
-        $stmtIns = $this->db->prepare("SELECT * FROM users WHERE role = 1");
+        // Lấy giảng viên (Role = 1)
+        $stmtIns = $this->db->prepare("SELECT * FROM users WHERE role = 1"); 
         $stmtIns->execute();
         $instructors = $stmtIns->fetchAll(PDO::FETCH_ASSOC);
 
@@ -75,7 +88,6 @@ class CourseController {
             $image = "";
             if (!empty($_FILES["image"]["name"])) {
                 $target_dir = "uploads/";
-                // Kiểm tra xem thư mục có tồn tại không, nếu không thì tạo
                 if (!file_exists($target_dir)) {
                     mkdir($target_dir, 0777, true);
                 }
@@ -108,5 +120,6 @@ class CourseController {
             }
         }
     }
-}
+
+} 
 ?>
