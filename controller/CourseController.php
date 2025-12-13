@@ -36,7 +36,7 @@ class CourseController {
                 return;
             }
 
-            require_once './views/courses/detail.php'; 
+            require_once './views/course/detail.php'; 
         } else {
             header("Location: index.php");
         }
@@ -49,7 +49,7 @@ class CourseController {
     // 3. Danh sách quản lý
     public function list() {
         $courses = $this->courseModel->getAllCourses();
-        require_once "./views/courses/list.php"; 
+        require_once "./views/course/list.php"; 
     }
 
     // 4. Form tạo khóa học mới
@@ -61,11 +61,11 @@ class CourseController {
         $categories = $stmtCat->fetchAll(PDO::FETCH_ASSOC);
 
         // Lấy giảng viên
-        $stmtIns = $this->db->prepare("SELECT * FROM users WHERE role = 1"); // Giả sử 1 là role giảng viên
+        $stmtIns = $this->db->prepare("SELECT * FROM users WHERE role = 1");
         $stmtIns->execute();
         $instructors = $stmtIns->fetchAll(PDO::FETCH_ASSOC);
 
-        require_once "./views/courses/create.php";
+        require_once "./views/course/create.php";
     }
 
     // 5. Lưu khóa học vào CSDL

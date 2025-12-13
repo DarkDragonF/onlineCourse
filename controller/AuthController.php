@@ -15,6 +15,12 @@ class AuthController {
 
     // --- ĐĂNG NHẬP ---
     public function login(){
+        if (session_status() === PHP_SESSION_NONE) session_start();
+
+        if (isset($_SESSION['user_id'])) {
+            header("Location: index.php?controller=home&action=dashboard");
+            exit();
+        }
         require "./views/auth/login.php";
     }
 
@@ -71,10 +77,10 @@ class AuthController {
                 
                 switch ($user['role']) {
                     case 0:
-                        header('Location: index.php?controller=student&action=dashboard');
+                        header('Location: index.php?controller=home&action=dashboard');
                         break;
                     case 1: 
-                        header('Location: index.php?controller=instructor&action=dashboard');
+                        header('Location: index.php?controller=home&action=dashboard');
                         break;
                     case 2:
                         header('Location: index.php?controller=admin&action=dashboard');
