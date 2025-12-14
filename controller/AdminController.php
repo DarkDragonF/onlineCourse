@@ -1,12 +1,15 @@
 <?php
-//version 1.1.3
+//version 1.2.0
 // Gọi các Models cần thiết
 require_once './models/Category.php';
 require_once './models/User.php';
 require_once './models/Course.php';
 
 class AdminController {
-    
+    public function __construct() {
+        $this->checkAdminAuth();
+    }
+
     // Hàm hỗ trợ render view 
     private function render($view, $data = []) {
         extract($data); // Giải nén mảng data thành biến
@@ -18,6 +21,26 @@ class AdminController {
             require_once './views/layouts/admin_layout.php';
         } else {
             die("Lỗi: Không tìm thấy file view tại: $viewPath");
+        }
+    }
+
+    private function checkAdminAuth() {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        
+        if (!isset($_SESSION['user_id'])) {
+            $_SESSION['error'] = "Vui lòng đăng nhập để truy cập!";
+            header("Location: index.php?controller=auth&action=login");
+            exit();
+        }
+        $userRole = $_SESSION['user_role'] ?? 0;
+
+        if ($userRole != 2) { 
+            echo "<div style='text-align:center; margin-top:50px;'>";
+            echo "<h1>⛔ Truy cập bị từ chối!</h1>";
+            echo "<p>Bạn không có quyền truy cập vào trang quản trị.</p>";
+            echo "<a href='index.php'>Quay về trang chủ</a>";
+            echo "</div>";
+            exit(); 
         }
     }
 

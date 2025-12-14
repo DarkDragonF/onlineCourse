@@ -1,11 +1,28 @@
 <?php
-//version 1.2.0
+//version 1.2.1
 require_once './models/Course.php';
 require_once './models/Enrollment.php';
 require_once './models/Lesson.php';
 
 class InstructorController {
+    public function __construct() {
+        $this->checkInstructorAuth();
+    }
+    private function checkInstructorAuth() {
+        if (session_status() === PHP_SESSION_NONE) session_start();
 
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: index.php?controller=auth&action=login");
+            exit();
+        }
+
+        $userRole = $_SESSION['user_role'] ?? 0;
+        
+        if ($userRole != 1 && $userRole != 2) {
+            header("Location: index.php?controller=course&action=mycourses");
+            exit();
+        }
+    }
     // Hàm kiểm tra quyền Giảng viên (Role = 1)
     private function checkAuth() {
         if (session_status() === PHP_SESSION_NONE) session_start();
