@@ -10,7 +10,7 @@ class Lesson {
 
     // Lấy danh sách bài học của khóa học (Sắp xếp theo thứ tự)
     public function getLessonsByCourseId($courseId) {
-        $query = "SELECT * FROM lessons WHERE course_id = :course_id ORDER BY `order` ASC";
+        $query = "SELECT * FROM lessons WHERE course_id = :course_id ORDER BY `order_` ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([':course_id' => $courseId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

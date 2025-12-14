@@ -53,7 +53,29 @@ class CourseController {
         }
     }
 
-    // 6. Hiển thị khóa học theo danh mục
+    // 3. Trang "Khóa học của tôi"
+    public function mycourses() {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: index.php?controller=auth&action=login");
+            exit();
+        }
+
+        $userId = $_SESSION['user_id'];
+
+        if (file_exists('./models/Enrollment.php')) {
+            require_once './models/Enrollment.php';
+        } else {
+            die("Lỗi: Thiếu file models/Enrollment.php");
+        }
+
+        $enrollmentModel = new Enrollment();
+        $myCourses = $enrollmentModel->getMyCourses($userId);
+
+        require_once './views/course/myCourse.php';
+    }
+
+    // 4. Hiển thị khóa học theo danh mục
     public function category() {
         if (isset($_GET['id'])) {
             $catId = $_GET['id'];

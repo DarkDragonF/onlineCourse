@@ -57,7 +57,7 @@ require_once './views/layouts/header.php';
                     <div class="card course-card shadow-sm">
                         <?php 
                             $img = !empty($course['image']) ? $course['image'] : 'https://via.placeholder.com/300x200';
-                            $imgSrc = (strpos($img, 'http') === 0) ? $img : "uploads/$img"; 
+                            $imgSrc = (strpos($img, 'http') === 0) ? $img : "assets/$img"; 
                         ?>
                         
                         <img src="<?= $imgSrc ?>" class="card-img-top" alt="Course Image">

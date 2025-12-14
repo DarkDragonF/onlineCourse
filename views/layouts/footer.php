@@ -1,7 +1,6 @@
 <link rel="stylesheet" href="./assets/css/footer.css">
 
 </div> 
-
 <footer class="footer">
     <div class="container">
         <div class="row">

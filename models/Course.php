@@ -1,11 +1,10 @@
 <?php
-//version 1.1.3
-// Gọi file cấu hình DB.
+// version 1.1.4
 require_once './config/Database.php';
 
 class Course {
     private $conn;
-    private $table_name = "courses";
+    private $table_name = "courses"; 
 
     public function __construct() {
         $this->conn = Database::getInstance();
@@ -23,9 +22,8 @@ class Course {
 
         $stmt = $this->conn->prepare($query);
 
-        // Làm sạch dữ liệu đầu vào (cơ bản)
+        // Làm sạch dữ liệu
         $data['title'] = htmlspecialchars(strip_tags($data['title']));
-        // $data['description'] thường không dùng strip_tags nếu dùng CKEditor, nhưng cần cẩn thận XSS
 
         return $stmt->execute([
             ':title'          => $data['title'],
@@ -37,6 +35,28 @@ class Course {
             ':level'          => $data['level'],
             ':image'          => $data['image'],
         ]);
+    }
+
+    public function getAllCoursesAdmin() {
+        $query = "SELECT 
+                    c.*, 
+                    cat.name as category_name, 
+                    u.fullname as instructor_name
+                  FROM " . $this->table_name . " c  
+                  LEFT JOIN categories cat ON c.category_id = cat.id
+                  LEFT JOIN users u ON c.instructor_id = u.id
+                  ORDER BY c.created_at DESC";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function delete($id) {
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
     }
 
     // ================================================================
@@ -63,7 +83,6 @@ class Course {
         $query = "SELECT c.*, u.fullname as instructor_name 
                   FROM " . $this->table_name . " c
                   LEFT JOIN users u ON c.instructor_id = u.id
-                  -- Có thể thêm điều kiện WHERE level = 'Advanced' hoặc is_featured = 1
                   ORDER BY c.price DESC 
                   LIMIT :limit"; 
         
@@ -122,6 +141,7 @@ class Course {
 
     // 6. Lọc khóa học theo category
     public function getCoursesByCategoryId($categoryId) {
+        // Fix lỗi biến table nếu cần thiết
         $query = "SELECT 
                     c.*, 
                     u.fullname as instructor_name
@@ -139,6 +159,4 @@ class Course {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
-   
-    
 ?>

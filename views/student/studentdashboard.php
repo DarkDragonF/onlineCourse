@@ -1,19 +1,6 @@
 <?php require_once './views/layouts/header.php'; ?>
 <!-- version 1.1.3 -->
-<style>
-    body { background-color: #f5f7fa; }
-    .dashboard-sidebar { background: white; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); overflow: hidden; }
-    .user-card-header { background: linear-gradient(135deg, var(--primary-color), #283593); padding: 30px 20px; text-align: center; color: white; }
-    .user-avatar-lg { width: 100px; height: 100px; border-radius: 50%; border: 4px solid rgba(255,255,255,0.2); object-fit: cover; margin-bottom: 10px; }
-    .menu-link { padding: 12px 20px; display: flex; align-items: center; color: #555; text-decoration: none; transition: 0.2s; border-left: 3px solid transparent; font-weight: 500; }
-    .menu-link:hover, .menu-link.active { background-color: #eef2ff; color: var(--primary-color); border-left-color: var(--primary-color); }
-    .stat-box { background: white; border-radius: 12px; padding: 20px; display: flex; align-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.02); height: 100%; }
-    .stat-icon-wrapper { width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-right: 15px; }
-    .course-progress-card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid #eee; transition: transform 0.2s, box-shadow 0.2s; }
-    .course-progress-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
-    .course-thumb-small { width: 140px; height: 90px; object-fit: cover; border-radius: 8px; }
-    .progress-height { height: 8px; border-radius: 4px; }
-</style>
+<link rel="stylesheet" href="./assets/css/studentPage.css">
 
 <div class="container py-5">
     <div class="row">
@@ -28,12 +15,6 @@
                 <div class="py-2">
                     <a href="index.php?controller=home&action=dashboard" class="menu-link active">
                         <i class="bi bi-grid-fill me-2"></i> Tổng quan
-                    </a>
-                    <a href="#" class="menu-link">
-                        <i class="bi bi-journal-album me-2"></i> Khóa học của tôi
-                    </a>
-                    <a href="#" class="menu-link">
-                        <i class="bi bi-gear me-2"></i> Cài đặt tài khoản
                     </a>
                 </div>
             </div>
@@ -71,7 +52,7 @@
                             <div class="col-md-3 mb-3 mb-md-0">
                                 <?php 
                                     $img = !empty($course['image']) ? $course['image'] : 'https://via.placeholder.com/300x200';
-                                    $imgSrc = (strpos($img, 'http') === 0) ? $img : "uploads/$img"; 
+                                    $imgSrc = (strpos($img, 'http') === 0) ? $img : "assets/$img"; 
                                 ?>
                                 <img src="<?= $imgSrc ?>" class="course-thumb-small w-100" alt="Course Img">
                             </div>

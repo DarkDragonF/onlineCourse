@@ -3,6 +3,7 @@
 // Gọi các Models cần thiết
 require_once './models/Category.php';
 require_once './models/User.php';
+require_once './models/Course.php';
 
 class AdminController {
     
@@ -24,10 +25,12 @@ class AdminController {
     public function dashboard() {
         $catModel = new Category();
         $userModel = new User(); 
+        $courseModel = new Course();
         
         $data['countCat'] = $catModel->count();
         $data['countUser'] = $userModel->count(); 
-        $data['countUser'] = 0; 
+        $allCourses = $courseModel->getAllCoursesAdmin();
+        $data['countCourse'] = count($allCourses);
 
         $this->render('dashboard', $data);
     }
@@ -99,6 +102,25 @@ class AdminController {
             $catModel->delete($_GET['id']);
         }
         header("Location: index.php?controller=admin&action=listCategories");
+    }
+
+    public function listCourses() {
+        // if ($_SESSION['user_role'] != 2){
+        //     Header('Location: index.php');
+        // }
+
+        $courseModel = new Course();
+        $data['courses'] = $courseModel->getAllCoursesAdmin();
+
+        $this->render('courses/index', $data);
+    }
+
+    public function deleteCourse() {
+        if (isset($_GET['id'])) {
+            $courseModel = new Course();
+            $courseModel->delete($_GET['id']);  
+        }
+        header("Location: index.php?controller=admin&action=listCourses");
     }
 }
 ?>

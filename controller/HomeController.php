@@ -1,12 +1,12 @@
 <?php
-// version 1.1.3
+// version 1.1.4
 require_once './models/Course.php';
 require_once './models/Enrollment.php';
 
 class HomeController {
 
     // =================================================================
-    // 1. TRANG CHỦ 
+    // 1. TRANG CHỦ (LANDING PAGE)
     // =================================================================
     public function index() {
         if (session_status() === PHP_SESSION_NONE) session_start();
@@ -23,7 +23,7 @@ class HomeController {
     }
 
     // =================================================================
-    // 2. DASHBOARD HỌC VIÊN 
+    // 2. DASHBOARD
     // =================================================================
     public function dashboard() {
         // 1. Kiểm tra đăng nhập
@@ -33,11 +33,34 @@ class HomeController {
             header("Location: index.php?controller=auth&action=login");
             exit();
         }
+        // -------------------------------------------------------------
+        // 2. LẤY ROLE ĐỂ PHÂN LUỒNG
+        // -------------------------------------------------------------
+        $role = $_SESSION['user_role'] ?? 0;
+
+        // TRƯỜNG HỢP: ADMIN (Role = 2)
+        if ($role == 2) {
+            header("Location: index.php?controller=admin&action=dashboard");
+            exit();
+        }
+        // -------------------------------------------------------------
+        // TRƯỜNG HỢP: GIẢNG VIÊN (Role = 1)
+        // -------------------------------------------------------------
+        if ($role == 1) {
+            // Sau này bạn có thể tạo InstructorController
+            // header("Location: index.php?controller=instructor&action=dashboard");
+            echo "<div style='padding:50px; text-align:center;'><h3>Xin chào Giảng viên!</h3><p>Trang quản lý của bạn đang được xây dựng.</p><a href='index.php?controller=auth&action=logout'>Đăng xuất</a></div>";
+            return;
+        }
+
+        // -------------------------------------------------------------
+        // TRƯỜNG HỢP: HỌC VIÊN (Role = 0)
+        // -------------------------------------------------------------
 
         // Lấy ID user hiện tại
         $studentId = $_SESSION['user_id'];
 
-        // 2. Gọi Model Enrollment để lấy dữ liệu thật
+        // Gọi Model Enrollment để lấy dữ liệu thật
         $enrollmentModel = new Enrollment();
         
         // Lấy danh sách khóa học kèm tiến độ
@@ -45,10 +68,12 @@ class HomeController {
 
         $totalEnrolled = $enrollmentModel->countEnrolled($studentId);
         
-        // (Tùy chọn) Tính toán số chứng chỉ hoặc khóa đã xong
+        // Tính toán số chứng chỉ hoặc khóa đã xong
         $completed = 0;
-        foreach ($myCourses as $c) {
-            if ($c['progress'] == 100) $completed++;
+        if (!empty($myCourses)) {
+            foreach ($myCourses as $c) {
+                if ($c['progress'] == 100) $completed++;
+            }
         }
 
         // Đóng gói dữ liệu thống kê
@@ -58,8 +83,14 @@ class HomeController {
             'certificates' => $completed 
         ];
 
-        // 3. Gọi View
-        require_once './views/student/studentdashboard.php';
+        // 3. Gọi View Dashboard của Học viên
+        // Đảm bảo file view tồn tại
+        if (file_exists('./views/student/studentdashboard.php')) {
+            require_once './views/student/studentdashboard.php';
+        } else {
+            // Fallback nếu bạn chưa đổi tên file view
+            require_once './views/student/dashboard.php';
+        }
     }
 }
 ?>

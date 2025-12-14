@@ -1,20 +1,8 @@
 <?php 
-// Không include Header/Footer mặc định vì trang học thường full màn hình
-// Nhưng ở đây mình include để giữ đồng bộ, bạn có thể bỏ nếu muốn custom riêng.
+
 include_once './views/layouts/header.php'; 
 ?>
-
-<style>
-    .learning-container { background-color: #f8f9fa; min-height: 100vh; }
-    .video-container { background: #000; width: 100%; height: 500px; display: flex; align-items: center; justify-content: center; border-radius: 8px; overflow: hidden; }
-    .sidebar-lessons { background: #fff; height: 600px; overflow-y: auto; border-left: 1px solid #ddd; }
-    .lesson-item { padding: 15px; border-bottom: 1px solid #eee; display: flex; align-items: center; justify-content: space-between; text-decoration: none; color: #333; transition: 0.2s; }
-    .lesson-item:hover { background-color: #f0f0f0; color: #000; }
-    .lesson-item.active { background-color: #e6f0ff; color: #0d6efd; border-left: 4px solid #0d6efd; }
-    .lesson-item.locked { color: #999; cursor: not-allowed; background-color: #f9f9f9; }
-    .status-icon { font-size: 1.2rem; }
-</style>
-
+<link rel="stylesheet" href="./assets/css/learning.css">
 <div class="learning-container py-4">
     <div class="container-fluid px-4">
         
@@ -37,7 +25,7 @@ include_once './views/layouts/header.php';
                     <div class="p-3 bg-light border-bottom fw-bold">Nội dung khóa học</div>
                     
                     <?php 
-                    $previousCompleted = true; // Biến cờ: Bài trước đã xong chưa? (Mặc định bài 1 luôn mở)
+                    $previousCompleted = true; 
                     
                     foreach ($lessons as $index => $lesson): 
                         $isCompleted = in_array($lesson['id'], $completedLessonIds);
@@ -53,7 +41,7 @@ include_once './views/layouts/header.php';
                             $previousCompleted = true;
                         }
                         
-                        // Nếu đang xem bài này thì không gọi là lock (đề phòng logic sai)
+                        // Nếu đang xem bài này thì không gọi là lock 
                         if ($isActive) $isLocked = false;
                     ?>
                         <?php if ($isLocked): ?>
