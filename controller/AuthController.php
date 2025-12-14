@@ -80,14 +80,19 @@ class AuthController {
                 // Lưu session
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_name'] = $user['fullname'];
-                $_SESSION['role'] = $user['role'];
+                $_SESSION['user_role'] = $user['role'];
+                if (!empty($user['avatar'])) {
+                    $_SESSION['user_avatar'] = (strpos($user['avatar'], 'http') === 0) ? $user['avatar'] : "uploads/" . $user['avatar'];
+                } else {
+                    $_SESSION['user_avatar'] = "https://via.placeholder.com/40";
+                }
 
                 switch ($user['role']) {
                     case 0:
                         header('Location: index.php?controller=home&action=dashboard');
                         break;
                     case 1: 
-                        header('Location: index.php?controller=home&action=dashboard');
+                        header('Location: index.php?controller=instructor&action=dashboard');
                         break;
                     case 2:
                         header('Location: index.php?controller=admin&action=dashboard');

@@ -119,7 +119,7 @@ class CourseController {
         $stmtIns->execute();
         $instructors = $stmtIns->fetchAll(PDO::FETCH_ASSOC);
 
-        require_once "./views/course/create.php";
+        require_once "./views/instructor/create.php";
     }
 
     // 5. Lưu khóa học vào CSDL

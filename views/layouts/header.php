@@ -84,7 +84,7 @@
                             <img src="<?= $_SESSION['user_avatar'] ?? 'assets/img/default-avatar.png' ?>" class="rounded-circle user-avatar" alt="Avatar">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
-                            <li><a class="dropdown-item" href="index.php?controller=user&action=profile"><i class="bi bi-person me-2"></i>Hồ sơ</a></li>
+                            <li><a class="dropdown-item" href="index.php?controller=profile&action=profile"><i class="bi bi-person me-2"></i>Hồ sơ</a></li>
                             <li><a class="dropdown-item" href="index.php?controller=course&action=mycourses"><i class="bi bi-book me-2"></i>Khóa học của tôi</a></li>
                             <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] == 1): ?>
                                 <li><hr class="dropdown-divider"></li>

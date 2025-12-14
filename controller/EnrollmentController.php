@@ -56,5 +56,22 @@ class EnrollmentController {
             }
         }
     }
+
+    public function getStudentsByInstructor($instructorId) {
+        $query = "SELECT 
+                    e.enrolled_at, e.progress,
+                    u.fullname as student_name, u.email as student_email, u.avatar as student_avatar,
+                    c.title as course_title
+                  FROM enrollments e
+                  JOIN courses c ON e.course_id = c.id
+                  JOIN users u ON e.student_id = u.id
+                  WHERE c.instructor_id = :instructor_id
+                  ORDER BY e.enrolled_at DESC";
+
+        $stmt = $this->conn->prepare($query); // Lưu ý: Biến kết nối là $conn hoặc $db tùy file của bạn
+        $stmt->bindParam(':instructor_id', $instructorId);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>

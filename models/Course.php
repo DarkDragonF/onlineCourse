@@ -59,8 +59,35 @@ class Course {
         return $stmt->execute();
     }
 
+    // ------------------------------------------------
+    // 2. DÀNH CHO GIẢNG VIÊN (INSTRUCTOR) 
+    // ------------------------------------------------
+
+    // Lấy danh sách khóa học CỦA RIÊNG giảng viên đó
+    public function getCoursesByInstructor($instructorId) {
+        $query = "SELECT * FROM " . $this->table_name . " 
+                  WHERE instructor_id = :instructor_id 
+                  ORDER BY created_at DESC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':instructor_id', $instructorId);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Đếm số khóa học của giảng viên
+    public function countByInstructor($instructorId) {
+        $query = "SELECT COUNT(*) as total FROM " . $this->table_name . " WHERE instructor_id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $instructorId);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row['total'];
+    }
+
+    
+
     // ================================================================
-    // PHẦN 2: HIỂN THỊ (FRONTEND) - LẤY DỮ LIỆU
+    // PHẦN 3: HIỂN THỊ (FRONTEND) - LẤY DỮ LIỆU
     // ================================================================
 
     // 1. Lấy danh sách khóa học MỚI NHẤT
@@ -158,5 +185,7 @@ class Course {
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    
 }
 ?>

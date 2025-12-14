@@ -79,5 +79,36 @@ class Lesson {
             ':cid' => $courseId
         ]);
     }
+
+
+
+    
+    // Thêm bài học mới
+    public function addLesson($courseId, $title, $videoUrl, $content, $order = 0) {
+        $query = "INSERT INTO lessons (course_id, title, video_url, content, `order_`) 
+                  VALUES (:course_id, :title, :video_url, :content, :order)";
+        
+        $stmt = $this->conn->prepare($query);
+        
+        // Xử lý dữ liệu đầu vào
+        $title = htmlspecialchars(strip_tags($title));
+        $content = htmlspecialchars(strip_tags($content));
+
+        return $stmt->execute([
+            ':course_id' => $courseId,
+            ':title' => $title,
+            ':video_url' => $videoUrl,
+            ':content' => $content,
+            ':order' => $order
+        ]);
+    }
+
+    // Xóa bài học (Nếu cần)
+    public function deleteLesson($id) {
+        $query = "DELETE FROM lessons WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        return $stmt->execute([':id' => $id]);
+    }
 }
+
 ?>

@@ -63,5 +63,22 @@ class Enrollment {
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         return $row['total'];
     }
+
+    public function getStudentsByInstructor($instructorId) {
+        $query = "SELECT 
+                    e.enrolled_date, e.progress,
+                    u.fullname as student_name, u.email as student_email, u.avatar as student_avatar,
+                    c.title as course_title
+                  FROM " . $this->table . " e
+                  JOIN courses c ON e.course_id = c.id
+                  JOIN users u ON e.student_id = u.id
+                  WHERE c.instructor_id = :instructor_id
+                  ORDER BY e.enrolled_date DESC";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':instructor_id', $instructorId);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>

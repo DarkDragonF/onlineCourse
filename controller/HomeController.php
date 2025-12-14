@@ -43,15 +43,6 @@ class HomeController {
             header("Location: index.php?controller=admin&action=dashboard");
             exit();
         }
-        // -------------------------------------------------------------
-        // TRƯỜNG HỢP: GIẢNG VIÊN (Role = 1)
-        // -------------------------------------------------------------
-        if ($role == 1) {
-            // Sau này bạn có thể tạo InstructorController
-            // header("Location: index.php?controller=instructor&action=dashboard");
-            echo "<div style='padding:50px; text-align:center;'><h3>Xin chào Giảng viên!</h3><p>Trang quản lý của bạn đang được xây dựng.</p><a href='index.php?controller=auth&action=logout'>Đăng xuất</a></div>";
-            return;
-        }
 
         // -------------------------------------------------------------
         // TRƯỜNG HỢP: HỌC VIÊN (Role = 0)
