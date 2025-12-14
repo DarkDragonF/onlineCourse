@@ -122,37 +122,56 @@ class CourseController {
     // 5. Lưu khóa học vào CSDL
     public function store() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Xử lý upload ảnh
+            
             $image = "";
-            if (!empty($_FILES["image"]["name"])) {
-                $target_dir = "assets/";
+
+            // Xử lý upload ảnh
+            if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+                $target_dir = "uploads/";
+                
                 if (!file_exists($target_dir)) {
                     mkdir($target_dir, 0777, true);
                 }
+
+                $originalName = basename($_FILES["image"]["name"]);
+                $cleanName = preg_replace('/[^A-Za-z0-9.\-_]/', '_', $originalName);
                 
-                $target_file = $target_dir . time() . "_" . basename($_FILES["image"]["name"]);
+                $fileName = time() . "_" . $cleanName;
                 
+                $target_file = $target_dir . $fileName;
+                
+                // 4. Upload file
                 if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-                    $image = $target_file;
+
+                    $image = $fileName;
                 }
             }
 
-            // Chuẩn bị dữ liệu
+
+            if (session_status() === PHP_SESSION_NONE) session_start();
+            $instructorId = $_SESSION['user_id'] ?? ($_POST["instructor_id"] ?? 0);
+
             $data = [
                 "title"          => $_POST["title"] ?? '',
                 "description"    => $_POST["description"] ?? '',
-                "instructor_id"  => $_POST["instructor_id"] ?? 0,
+                "instructor_id"  => $instructorId, // Sửa lại lấy đúng ID giảng viên
                 "category_id"    => $_POST["category_id"] ?? 0,
                 "price"          => $_POST["price"] ?? 0,
                 "duration_weeks" => $_POST["duration_weeks"] ?? 0,
                 "level"          => $_POST["level"] ?? 'Beginner',
-                "image"          => $image,
+                "image"          => $image, // Chỉ lưu tên file
             ];
 
             // Gọi Model để lưu
             if ($this->courseModel->create($data)) {
-                // Redirect về trang danh sách
-                header("Location: index.php?controller=course&action=list");
+                // Nếu là giảng viên -> Về trang quản lý của giảng viên
+                // Nếu là admin -> Về trang danh sách admin
+                if (isset($_SESSION['user_role']) && $_SESSION['user_role'] == 1) {
+                    header("Location: index.php?controller=instructor&action=courseManagement");
+                } else {
+                    header("Location: index.php?controller=course&action=list");
+                }
+                exit();
             } else {
                 echo "Có lỗi xảy ra khi tạo khóa học.";
             }
@@ -160,7 +179,6 @@ class CourseController {
     }
 
     public function search() {
-        // 1. Lấy từ khóa từ URL (VD: index.php?controller=course&action=search&keyword=php)
         $keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
         
         $courseModel = new Course();

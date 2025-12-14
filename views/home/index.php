@@ -59,8 +59,8 @@ require_once './views/layouts/header.php';
                 <div class="col-lg-3 col-md-4 col-sm-6 mb-4 reveal">
                     <div class="card course-card shadow-sm h-100">
                         <?php 
-                            $img = !empty($course['image']) ? $course['image'] : 'https://via.placeholder.com/300x200';
-                            $imgSrc = (strpos($img, 'http') === 0) ? $img : "assets/$img"; 
+                            $img = !empty($course['image']) ? $course['image'] : './assets/img/default-course.jpg';
+                            $imgSrc = (strpos($img, 'http') === 0) ? $img : "uploads/$img"; 
                         ?>
                         
                         <div style="overflow: hidden; border-radius: 15px 15px 0 0;">
