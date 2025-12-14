@@ -1,3 +1,4 @@
+<!-- //version 1.2.0 -->
 <div class="card shadow-sm">
     <div class="card-header bg-warning text-dark">
         <h4 class="mb-0"><i class="fas fa-edit me-2"></i>Chỉnh sửa Danh mục</h4>

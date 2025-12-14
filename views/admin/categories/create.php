@@ -1,3 +1,5 @@
+<!-- //version 1.2.0 -->
+
 <div class="card shadow-sm">
     <div class="card-header bg-primary text-white">
         <h4 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Thêm Danh mục Mới</h4>

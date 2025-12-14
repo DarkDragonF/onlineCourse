@@ -1,5 +1,5 @@
 <?php require_once './views/layouts/header.php'; ?>
-
+<!-- //version 1.2.0 -->
 <div class="bg-light py-5">
     <div class="container">
         <div class="row">

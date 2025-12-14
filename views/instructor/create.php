@@ -1,5 +1,5 @@
 <?php include __DIR__ . '/../layouts/header.php'; ?>
-
+<!-- //version 1.2.0 -->
 <div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-lg-10">

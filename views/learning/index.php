@@ -1,7 +1,5 @@
-<?php 
-
-include_once './views/layouts/header.php'; 
-?>
+<?php include_once './views/layouts/header.php'; ?>
+<!-- //version 1.2.0 -->
 <link rel="stylesheet" href="./assets/css/learning.css">
 <div class="learning-container py-4">
     <div class="container-fluid px-4">

@@ -1,5 +1,5 @@
 <?php require_once './views/layouts/header.php'; ?>
-<!-- version 1.1.3 -->
+<!-- //version 1.2.0 -->
 <link rel="stylesheet" href="./assets/css/studentPage.css">
 
 <div class="container py-5">

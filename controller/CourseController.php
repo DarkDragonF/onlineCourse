@@ -1,5 +1,5 @@
 <?php
-//version 1.1.3
+//version 1.2.0
 // Gọi các file cấu hình và Model
 require_once './config/Database.php';
 require_once './models/Course.php';
@@ -100,9 +100,6 @@ class CourseController {
     // 3. Danh sách quản lý
     public function list() {
         $courses = $this->courseModel->getAllCourses();
-        
-        // GIẢI QUYẾT CONFLICT: Sử dụng đường dẫn 'courses' (số nhiều)
-        // vì đây là thư mục chúng ta đã tạo ở các bước trước.
         require_once "./views/course/list.php"; 
     }
 
@@ -128,7 +125,7 @@ class CourseController {
             // Xử lý upload ảnh
             $image = "";
             if (!empty($_FILES["image"]["name"])) {
-                $target_dir = "uploads/";
+                $target_dir = "assets/";
                 if (!file_exists($target_dir)) {
                     mkdir($target_dir, 0777, true);
                 }
@@ -160,6 +157,30 @@ class CourseController {
                 echo "Có lỗi xảy ra khi tạo khóa học.";
             }
         }
+    }
+
+    public function search() {
+        // 1. Lấy từ khóa từ URL (VD: index.php?controller=course&action=search&keyword=php)
+        $keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
+        
+        $courseModel = new Course();
+        $courses = [];
+        $message = "";
+
+        if (!empty($keyword)) {
+            // 2. Gọi Model để tìm kiếm
+            $courses = $courseModel->searchCourses($keyword);
+            
+            if (empty($courses)) {
+                $message = "Không tìm thấy khóa học nào phù hợp với từ khóa: <b>" . htmlspecialchars($keyword) . "</b>";
+            }
+        } else {
+            $message = "Vui lòng nhập từ khóa để tìm kiếm.";
+        }
+
+        // 3. Trả về View hiển thị kết quả
+        // Chúng ta sẽ tạo một file view riêng hoặc tái sử dụng file index
+        require_once './views/course/search.php';
     }
 
 } 

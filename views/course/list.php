@@ -29,7 +29,7 @@
                     <div class="card h-100 shadow-sm border-0" style="border-radius: 15px; overflow: hidden; transition: transform 0.3s;">
                         <?php 
                             $img = !empty($course['image']) ? $course['image'] : 'https://via.placeholder.com/300x200';
-                            $imgSrc = (strpos($img, 'http') === 0) ? $img : "uploads/$img"; 
+                            $imgSrc = (strpos($img, 'http') === 0) ? $img : "assets/$img"; 
                         ?>
                         <div style="height: 180px; overflow: hidden;">
                             <img src="<?= $imgSrc ?>" class="w-100 h-100" style="object-fit: cover;" alt="Course Image">

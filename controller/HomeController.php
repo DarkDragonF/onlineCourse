@@ -1,5 +1,5 @@
 <?php
-// version 1.1.4
+//version 1.2.0
 require_once './models/Course.php';
 require_once './models/Enrollment.php';
 
@@ -79,7 +79,6 @@ class HomeController {
         if (file_exists('./views/student/studentdashboard.php')) {
             require_once './views/student/studentdashboard.php';
         } else {
-            // Fallback nếu bạn chưa đổi tên file view
             require_once './views/student/dashboard.php';
         }
     }

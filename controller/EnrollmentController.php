@@ -1,7 +1,7 @@
 <?php
 require_once './models/Course.php';
 require_once './models/Enrollment.php';
-//version 1.1.3
+//version 1.2.0
 class EnrollmentController {
     
     // 1. Hiển thị trang Thanh toán (Checkout)
@@ -47,9 +47,7 @@ class EnrollmentController {
 
             $enrollmentModel = new Enrollment();
             
-            // Lưu vào CSDL (Giả lập thanh toán thành công)
             if ($enrollmentModel->create($userId, $courseId, $price)) {
-                // Chuyển hướng đến trang "Khóa học của tôi"
                 echo "<script>alert('Đăng ký thành công! Chào mừng bạn vào học.'); window.location.href='index.php?controller=course&action=mycourses';</script>";
             } else {
                 echo "Lỗi hệ thống, vui lòng thử lại.";
@@ -68,7 +66,7 @@ class EnrollmentController {
                   WHERE c.instructor_id = :instructor_id
                   ORDER BY e.enrolled_at DESC";
 
-        $stmt = $this->conn->prepare($query); // Lưu ý: Biến kết nối là $conn hoặc $db tùy file của bạn
+        $stmt = $this->conn->prepare($query); 
         $stmt->bindParam(':instructor_id', $instructorId);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

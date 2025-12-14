@@ -1,5 +1,5 @@
 <?php
-// version 1.1.4
+//version 1.2.0
 require_once './config/Database.php';
 
 class Course {

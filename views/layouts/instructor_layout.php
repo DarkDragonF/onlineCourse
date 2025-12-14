@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- //version 1.2.0 -->
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -63,7 +64,7 @@
                     <h5 class="mb-0 text-secondary">Chào mừng trở lại, <span class="text-primary fw-bold"><?= $_SESSION['user_name'] ?></span>!</h5>
                     <div class="d-flex align-items-center">
                         <span class="badge bg-primary me-2">Instructor</span>
-                        <img src="<?= $_SESSION['user_avatar'] ?? 'https://via.placeholder.com/40' ?>" class="user-avatar border">
+                        <img src="<?= $_SESSION['user_avatar'] ?? './assets/img/default-user.png' ?>" class="user-avatar border">
                     </div>
                 </div>
 

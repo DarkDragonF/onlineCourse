@@ -1,3 +1,4 @@
+<!-- //version 1.2.0 -->
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="fw-bold text-secondary">Quản lý Khóa học</h2>
     <a href="index.php?controller=course&action=create" class="btn btn-primary">
@@ -30,7 +31,7 @@
                                     <?php 
                                         $img = !empty($c['image']) ? $c['image'] : 'https://via.placeholder.com/150';
                                         // Kiểm tra nếu link ảnh là http (ảnh mạng) hay ảnh upload
-                                        $imgSrc = (strpos($img, 'http') === 0) ? $img : "uploads/$img"; 
+                                        $imgSrc = (strpos($img, 'http') === 0) ? $img : "assets/$img"; 
                                     ?>
                                     <img src="<?= $imgSrc ?>" alt="Thumb" class="rounded border" style="width: 60px; height: 40px; object-fit: cover;">
                                 </td>

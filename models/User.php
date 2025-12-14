@@ -1,9 +1,8 @@
 <?php
-// version 1.1.4 (Fix variable name mismatch)
+//version 1.2.0
 require_once 'config/Database.php';
 
 class User {
-    // Khai báo biến kết nối là $db (Code cũ của bạn dùng tên này)
     private $db;
     private $table = 'users';
 
@@ -40,18 +39,15 @@ class User {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // --- ĐÃ SỬA: Dùng $this->db thay vì $this->conn ---
     public function getById($id) {
         $query = "SELECT * FROM " . $this->table . " WHERE id = :id LIMIT 1";
         
-        // Sửa tại đây: $this->db
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // --- ĐÃ SỬA: Dùng $this->db thay vì $this->conn ---
     public function updateProfile($id, $fullname, $phone, $bio, $avatar) {
         if ($avatar) {
             $query = "UPDATE " . $this->table . " 
@@ -69,7 +65,6 @@ class User {
                       WHERE id = :id";
         }
 
-        // Sửa tại đây: $this->db
         $stmt = $this->db->prepare($query);
 
         // Gán dữ liệu

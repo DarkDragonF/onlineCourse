@@ -1,0 +1,59 @@
+        body {
+            background-image: url('./assets/img/login-bg.png');
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .card-auth {
+            border: none;
+            border-radius: 15px;
+            /* Tăng độ đậm của bóng đổ để nổi bật trên nền tranh vẽ */
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            /* Làm mờ nhẹ nền trắng của card để thấy thoáng qua hình nền (Hiệu ứng Glassmorphism) */
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+
+        .card-header-auth {
+            background-color: transparent;
+            /* Để nền trong suốt ăn theo card-auth */
+            padding-top: 30px;
+            border-bottom: none;
+            text-align: center;
+        }
+
+        .btn-primary-auth {
+            /* Lấy màu tím đậm từ trong hình nền để làm màu nút cho đồng bộ */
+            background: #4A148C;
+            border: none;
+            padding: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary-auth:hover {
+            background: #7B1FA2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 20, 140, 0.3);
+        }
+
+        /* Màu chữ link đăng ký */
+        .link-register {
+            color: #4A148C;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .link-register:hover {
+            color: #7B1FA2;
+            text-decoration: underline;
+        }

@@ -1,4 +1,5 @@
 <?php
+//version 1.2.0
 require_once './models/User.php';
 
 class ProfileController {

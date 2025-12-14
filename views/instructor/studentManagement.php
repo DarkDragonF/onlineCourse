@@ -1,3 +1,4 @@
+<!-- //version 1.2.0 -->
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h4 class="fw-bold text-dark">Danh sách Học viên & Tiến độ</h4>
     <button class="btn btn-outline-secondary btn-sm"><i class="fas fa-download me-1"></i> Xuất báo cáo</button>

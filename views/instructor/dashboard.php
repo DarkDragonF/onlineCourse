@@ -1,3 +1,4 @@
+<!-- //version 1.2.0 -->
 <div class="row g-4 mb-4">
     <div class="col-md-6 col-lg-4">
         <div class="card card-custom h-100 border-start border-4 border-primary">

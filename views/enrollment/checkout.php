@@ -1,10 +1,8 @@
 <?php 
-// views/enrollment/checkout.php
-// Gọi Header (Lưu ý đường dẫn phải chuẩn tính từ file index.php)
+//version 1.2.0 
 if (file_exists('./views/layouts/header.php')) {
     include_once './views/layouts/header.php';
 } else {
-    // Fallback nếu cấu trúc thư mục khác
     echo "<h1>Lỗi: Không tìm thấy Header</h1>";
 }
 ?>

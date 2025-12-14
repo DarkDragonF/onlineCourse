@@ -1,6 +1,7 @@
 <?php
+//version 1.2.0 
 class Database {
-    //version 1.1.1
+
     private static $instance = null;
     public $conn;
 

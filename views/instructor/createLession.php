@@ -2,7 +2,7 @@
 // Xác định trạng thái hiển thị
 $isLessonList = (isset($view_state) && $view_state == 'lesson_list');
 ?>
-
+<!-- //version 1.2.0 -->
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
         <h4 class="fw-bold text-dark mb-1">
